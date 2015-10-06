@@ -1,10 +1,22 @@
 angular.module('starter.services', ['firebase'])
 
-.factory('Chats', function () {
+.factory('Chat', function () {
+    var content = [];   //  to keep track of what is received
+    var chat = [];      //  payloads (unique)
+
+    var fluxCenter;
+    var fluxNorth;
+    var fluxSouth;
+    var fluxEast;
+    var fluxWest;
+
+    var lastTs = Date.now();
+
     var position = {
         'coords.latitude': 45.745125,
         'coords.longitude': 4.861638
     };
+
     var name = "anon";
     // Might use a resource here that returns a JSON array
     var center = function () {
@@ -17,81 +29,77 @@ angular.module('starter.services', ['firebase'])
         return ((Math.round(position["coords.latitude"] * 1000) - 1)) + "x" + (Math.round(position["coords.longitude"] * 1000));
     }
     var east = function () {
-        return ((Math.round(position["coords.latitude"] * 1000) + 1)) + "x" + ((Math.round(position["coords.latitude"] * 1000) - 1));
+        return (Math.round(position["coords.latitude"] * 1000)) + "x" + ((Math.round(position["coords.latitude"] * 1000) - 1));
     }
     var west = function () {
-        return ((Math.round(position["coords.latitude"] * 1000) - 1)) + "x" + ((Math.round(position["coords.latitude"] * 1000) + 1));
+        return (Math.round(position["coords.latitude"] * 1000)) + "x" + ((Math.round(position["coords.latitude"] * 1000) + 1));
     }
 
-    var fluxCenter;
-    var fluxNorth;
-    var fluxSouth;
-    var fluxEast;
-    var fluxWest;
+    var receive = function (payload) {
+        if (lastTs < payload.ts && content[payload.n + payload.ts] == null) {
+            console.log("received : " + payload.m);
+            content[payload.n + payload.ts] = payload;
+            lastTs = payload.ts;
+            chat.push(payload);
+        }
+    }
 
     var refreshFluxes = function () {
-        fluxCenter = new Firebase("https://vivid-heat-5271.firebaseio.com/" + center());
-        fluxNorth = new Firebase("https://vivid-heat-5271.firebaseio.com/" + north());
-        fluxSouth = new Firebase("https://vivid-heat-5271.firebaseio.com/" + south());
-        fluxEast = new Firebase("https://vivid-heat-5271.firebaseio.com/items" + east());
-        fluxWest = new Firebase("https://vivid-heat-5271.firebaseio.com/items" + west());
+        fluxCenter = new Firebase("https://vivid-heat-5271.firebaseio.com/shout/" + center());
+        fluxNorth = new Firebase("https://vivid-heat-5271.firebaseio.com/shout/" + north());
+        fluxSouth = new Firebase("https://vivid-heat-5271.firebaseio.com/shout/" + south());
+        fluxEast = new Firebase("https://vivid-heat-5271.firebaseio.com/shout/" + east());
+        fluxWest = new Firebase("https://vivid-heat-5271.firebaseio.com/shout/" + west());
+        fluxCenter.on('child_added', function (snapshot) {
+            receive(snapshot.val());
+        });
+        fluxNorth.on('child_added', function (snapshot) {
+            receive(snapshot.val());
+        });
+        fluxSouth.on('child_added', function (snapshot) {
+            receive(snapshot.val());
+        });
+        fluxEast.on('child_added', function (snapshot) {
+            receive(snapshot.val());
+        });
+        fluxCenter.on('child_added', function (snapshot) {
+            receive(snapshot.val());
+        });
     }
     refreshFluxes();
 
-    var publish = function (message) {
+    var shout = function (message) {
         var payload = {
             'ts': Date.now(),
-            'orig.name': name,
-            'orig.pos': position,
-            'message': message
+            'n': name,
+            'p': position["coords.latitude"] + "x" + position["coords.latitude"],
+            'm': message
         }
-        fluxCenter.$add(payload);
-        fluxNorth.$add(payload);
-        fluxSouth.$add(payload);
-        fluxEast.$add(payload);
-        fluxWest.$add(payload);
+        fluxCenter.push(payload);
+        fluxNorth.push(payload);
+        fluxSouth.push(payload);
+        fluxEast.push(payload);
+        fluxWest.push(payload);
     }
 
-    var chat = [];
-    fluxCenter.on('child_added', function (payload) {
-        chat.push(payload.orig.name + payload.ts, payload);
-    })
-    fluxNorth.on('child_added', function (payload) {
-        chat.push(payload.orig.name + payload.ts, payload);
-    })
-    fluxSouth.on('child_added', function (payload) {
-        chat.push(payload.orig.name + payload.ts, payload);
-    })
-    fluxEast.on('child_added', function (payload) {
-        chat.push(payload.orig.name + payload.ts, payload);
-    })
-    fluxCenter.on('child_added', function (payload) {
-        chat.push(payload.orig.name + payload.ts, payload);
-    })
-
     return {
-        all: function () {
+        chat: function () {
+            console.log("return : " + chat);
             return chat;
-        },
-        remove: function (chat) {
-            chats.splice(chats.indexOf(chat), 1);
-        },
-        get: function (chatId) {
-            for (var i = 0; i < chats.length; i++) {
-                if (chats[i].id === parseInt(chatId)) {
-                    return chats[i];
-                }
-            }
-            return null;
         },
         forcePosition: function (newPosition) {
             position = newPosition;
+            refreshFluxes();
         },
         getPosition: function () {
             return position;
         },
         refreshPosition: function () {
+            refreshFluxes();
             return this.getPosition();
-        }
+        },
+        publish: function (message) {
+            shout(message);
+        },
     };
 });
