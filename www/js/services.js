@@ -1,8 +1,8 @@
 angular.module('starter.services', ['firebase'])
 
-.factory('Chat', function () {
-    var content = [];   //  to keep track of what is received
-    var chat = [];      //  payloads (unique)
+.factory('Chat', function ($rootScope) {
+    var content = []; //  to keep track of what is received
+    var chat = []; //  payloads (unique)
 
     var fluxCenter;
     var fluxNorth;
@@ -10,7 +10,7 @@ angular.module('starter.services', ['firebase'])
     var fluxEast;
     var fluxWest;
 
-    var lastTs = Date.now();
+    var lastTs = Date.now() - 60 * 1000 * 2;
 
     var position = {
         'coords.latitude': 45.745125,
@@ -41,6 +41,7 @@ angular.module('starter.services', ['firebase'])
             content[payload.n + payload.ts] = payload;
             lastTs = payload.ts;
             chat.push(payload);
+            $rootScope.$broadcast("newMessage");
         }
     }
 
