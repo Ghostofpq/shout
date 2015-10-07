@@ -21,9 +21,8 @@ angular.module('starter.controllers', [])
     };
     $scope.$on('newMessage', function (event, args) {
         console.log(args);
-        $scope.chat.push(args);
-        console.log($scope.chat);
-        $ionicScrollDelegate.scrollBottom();
+        $scope.chat.unshift(args);
+        $ionicScrollDelegate.scrollTop();
     });
 })
 
