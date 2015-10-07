@@ -11,7 +11,7 @@ angular.module('starter.controllers', [])
     //$scope.$on('$ionicView.enter', function(e) {
     //});
 
-    $scope.chat = Chat.chat;
+    $scope.chat = [];
     $scope.position = Chat.getPosition();
     $scope.message = "";
 
@@ -19,7 +19,10 @@ angular.module('starter.controllers', [])
         Chat.publish($scope.message);
         $scope.message = "";
     };
-    $scope.$on('newMessage', function () {
+    $scope.$on('newMessage', function (event, args) {
+        console.log(args);
+        $scope.chat.push(args);
+        console.log($scope.chat);
         $ionicScrollDelegate.scrollBottom();
     });
 })

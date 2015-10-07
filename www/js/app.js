@@ -80,11 +80,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         }
     });
 
-  // .state('loading', {
-  //     url: '/loading',
-  //     templateUrl: 'templates/loading.html',
-  //     controller: 'LoadingUpCtrl'
-  // })
+
+    // .state('loading', {
+    //     url: '/loading',
+    //     templateUrl: 'templates/loading.html',
+    //     controller: 'LoadingUpCtrl'
+    // })
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('tab/chat');

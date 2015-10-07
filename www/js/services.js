@@ -2,8 +2,7 @@ angular.module('starter.services', ['firebase'])
 
 .factory('Chat', function ($rootScope) {
     var content = []; //  to keep track of what is received
-    var chat = []; //  payloads (unique)
-
+   
     var fluxCenter;
     var fluxNorth;
     var fluxSouth;
@@ -43,8 +42,7 @@ angular.module('starter.services', ['firebase'])
             console.log("received : " + payload.m);
             content[payload.n + payload.ts] = payload;
             lastTs = payload.ts;
-            chat.push(payload);
-            $rootScope.$broadcast("newMessage");
+            $rootScope.$broadcast("newMessage",payload);
         }
     }
 
@@ -55,6 +53,7 @@ angular.module('starter.services', ['firebase'])
         fluxEast = new Firebase("https://vivid-heat-5271.firebaseio.com/shout/" + east());
         fluxWest = new Firebase("https://vivid-heat-5271.firebaseio.com/shout/" + west());
         fluxCenter.on('child_added', function (snapshot) {
+            console.log('child_added'+snapshot.val());
             receive(snapshot.val());
         });
         fluxNorth.on('child_added', function (snapshot) {
@@ -89,10 +88,7 @@ angular.module('starter.services', ['firebase'])
     }
 
     return {
-        chat: function () {
-            console.log("return : " + chat);
-            return chat;
-        },
+        
         forcePosition: function (newPosition) {
             position = newPosition;
             refreshFluxes();

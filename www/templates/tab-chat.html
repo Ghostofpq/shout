@@ -2,7 +2,7 @@
     <p>Current Position : {{position}}</p>
     <ion-content>
         <ion-list>
-            <ion-item collection-repeat="c in chat()| orderBy:'ts':false" type="item-text-wrap">
+            <ion-item ng-repeat="c in chat" type="item-text-wrap">
                 <h2>{{c.n}}</h2>
                 <p>{{c.m}}</p>
                 <span am-time-ago="c.ts" class="item-note" />
