@@ -16,8 +16,11 @@ angular.module('starter.services', ['firebase'])
         'coords.latitude': 45.745125,
         'coords.longitude': 4.861638
     };
-
-    var name = "anon";
+    var settings = {
+        'textColor': "black",
+        'backgroundColor': "white",
+        'name': "anon"
+    };
     // Might use a resource here that returns a JSON array
     var center = function () {
         return (Math.round(position["coords.latitude"] * 1000)) + "x" + (Math.round(position["coords.longitude"] * 1000));
@@ -72,7 +75,9 @@ angular.module('starter.services', ['firebase'])
     var shout = function (message) {
         var payload = {
             'ts': Date.now(),
-            'n': name,
+            'n': settings.name,
+            'tc': settings.textColor,
+            'bc': settings.backgroundColor,
             'p': position["coords.latitude"] + "x" + position["coords.latitude"],
             'm': message
         }
@@ -102,5 +107,11 @@ angular.module('starter.services', ['firebase'])
         publish: function (message) {
             shout(message);
         },
+        getSettings: function () {
+            return settings;
+        },
+        setSettings: function (newSettings) {
+            settings = newSettings;
+        }
     };
 });

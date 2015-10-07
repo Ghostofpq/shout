@@ -18,15 +18,31 @@ angular.module('starter.controllers', [])
     $scope.publish = function () {
         Chat.publish($scope.message);
         $scope.message = "";
-
     };
     $scope.$on('newMessage', function () {
         $ionicScrollDelegate.scrollBottom();
     });
 })
 
-.controller('AccountCtrl', function ($scope) {
-    $scope.settings = {
-        enableFriends: true
+.controller('AccountCtrl', function ($scope, Chat) {
+    $scope.name = Chat.getName();
+    $scope.color = Chat.getColor();
+    $scope.setName = function () {
+        Chat.setName($scope.name);
+    };
+    $scope.setColor = function () {
+        Chat.setColor($scope.color);
     };
 });
+
+//.controller('LoadingUpCtrl', function ($cordovaGeolocation) {
+//    console.log("yo");
+//    var position = $cordovaGeolocation.getCurrentPosition({
+//        'timeout': 1000 * 10,
+//        'enableHighAccuracy': true
+//    }).then(function (position) {
+//        console.log(position);
+//    }, function (err) {
+//        console.log(":(");
+//    });
+//});
