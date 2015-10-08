@@ -9,7 +9,7 @@
     </author>
   <content src="index.html"/>
   <access origin="*"/>
-    <access origin="https://vivid-heat-5271.firebaseio.com/*" />
+  <allow-navigation href="https://vivid-heat-5271.firebaseio.com/*" />
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>

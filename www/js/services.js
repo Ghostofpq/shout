@@ -53,7 +53,6 @@ angular.module('starter.services', ['firebase'])
         fluxEast = new Firebase("https://vivid-heat-5271.firebaseio.com/shout/" + east());
         fluxWest = new Firebase("https://vivid-heat-5271.firebaseio.com/shout/" + west());
         fluxCenter.on('child_added', function (snapshot) {
-            console.log('child_added'+snapshot.val());
             receive(snapshot.val());
         });
         fluxNorth.on('child_added', function (snapshot) {
