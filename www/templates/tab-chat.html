@@ -1,11 +1,14 @@
 <ion-view view-title="Chat">
-    <p>Current Position : {{position}}</p>
+
     <ion-content>
         <ion-list>
+            <ion-item>
+                <p>Current Position : {{pos.coords.latitude}};{{pos.coords.longitude}}</p>
+            </ion-item>
             <ion-item collection-repeat="c in chat" type="item-text-wrap">
-                <p>{{c.m}}</p>                
+                <p>{{c.m}}</p>
                 <div class="item-note">
-                    <span>by {{c.n}} </span><span am-time-ago="c.ts"/>
+                    <span>by {{c.n}} </span><span am-time-ago="c.ts" />
                 </div>
             </ion-item>
         </ion-list>
