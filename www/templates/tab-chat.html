@@ -2,14 +2,10 @@
 
     <ion-content>
         <ion-list>
-            <ion-item>
-                <p>Current Position : {{pos.coords.latitude}};{{pos.coords.longitude}}</p>
-            </ion-item>
-            <ion-item collection-repeat="c in chat" type="item-text-wrap">
+            <p>Current Position : {{pos.coords.latitude}};{{pos.coords.longitude}}</p>
+            <ion-item class="chat-bubble" collection-repeat="c in chat" ng-class="{left : c.ext, right:!c.ext}">
                 <p>{{c.m}}</p>
-                <div class="item-note">
-                    <span>by {{c.n}} </span><span am-time-ago="c.ts" />
-                </div>
+                <span>by {{c.n}} </span><span am-time-ago="c.ts" />
             </ion-item>
         </ion-list>
     </ion-content>

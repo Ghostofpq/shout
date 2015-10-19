@@ -18,12 +18,23 @@ angular.module('starter.controllers', [])
     $scope.message = "";
 
     $scope.publish = function () {
-        Chat.publish($scope.message);
+        if ($scope.message.trim().length > 0) {
+            var payload = Chat.convertMessageToPayload($scope.message);
+            payload.ext = false;
+            $scope.chat.unshift(payload);
+            Chat.publish(Chat.convertMessageToPayload($scope.message));
+        }
         $scope.message = "";
     };
     $scope.$on('newMessage', function (event, args) {
-        $scope.chat.unshift(args);
-        $ionicScrollDelegate.scrollTop();
+        if (!$scope.chat.find(function (element, index, array) {
+                if (element.m === args.m && element.n === args.n && element.ts === args.ts) {
+                    return true;
+                }
+            })) {
+            $scope.chat.unshift(args);
+            $ionicScrollDelegate.scrollTop();
+        }
     });
 
     $scope.watch = navigator.geolocation.watchPosition(function (updatedPos) {
@@ -37,14 +48,8 @@ angular.module('starter.controllers', [])
 })
 
 .controller('AccountCtrl', function ($scope, Chat) {
-    $scope.name = Chat.getName();
-    $scope.color = Chat.getColor();
-    $scope.setName = function () {
-        Chat.setName($scope.name);
-    };
-    $scope.setColor = function () {
-        Chat.setColor($scope.color);
-    };
+    $scope.settings = Chat.getSettings();
+    $scope.updateSettings = Chat.setSettings($scope.settings);
 })
 
 .directive('input', function ($timeout) {
@@ -84,15 +89,3 @@ angular.module('starter.controllers', [])
         }
     }
 });
-
-//.controller('LoadingUpCtrl', function ($cordovaGeolocation) {
-//    console.log("yo");
-//    var position = $cordovaGeolocation.getCurrentPosition({
-//        'timeout': 1000 * 10,
-//        'enableHighAccuracy': true
-//    }).then(function (position) {
-//        console.log(position);
-//    }, function (err) {
-//        console.log(":(");
-//    });
-//});

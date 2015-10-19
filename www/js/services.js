@@ -1,13 +1,12 @@
 angular.module('starter.services', ['firebase'])
 
 .factory('Chat', function ($rootScope) {
-    var content = []; //  to keep track of what is received
-
     var fluxCenter;
     var fluxNorth;
     var fluxSouth;
     var fluxEast;
     var fluxWest;
+
     var position;
     var lastTs = Date.now() - 60 * 1000 * 2;
 
@@ -34,9 +33,8 @@ angular.module('starter.services', ['firebase'])
     }
 
     var receive = function (payload) {
-        if (lastTs < payload.ts && content[payload.n + payload.ts] == null) {
+        if (lastTs < payload.ts + 1000) {
             console.log("received : " + payload.m);
-            content[payload.n + payload.ts] = payload;
             lastTs = payload.ts;
             $rootScope.$broadcast("newMessage", payload);
         }
@@ -44,11 +42,13 @@ angular.module('starter.services', ['firebase'])
 
     var refreshFluxes = function () {
         console.log("Opening fluxes for " + center(position));
+
         fluxCenter = new Firebase("https://vivid-heat-5271.firebaseio.com/shout/" + center(position));
         fluxNorth = new Firebase("https://vivid-heat-5271.firebaseio.com/shout/" + north(position));
         fluxSouth = new Firebase("https://vivid-heat-5271.firebaseio.com/shout/" + south(position));
         fluxEast = new Firebase("https://vivid-heat-5271.firebaseio.com/shout/" + east(position));
         fluxWest = new Firebase("https://vivid-heat-5271.firebaseio.com/shout/" + west(position));
+
         fluxCenter.on('child_added', function (snapshot) {
             receive(snapshot.val());
         });
@@ -66,15 +66,7 @@ angular.module('starter.services', ['firebase'])
         });
     }
 
-    var shout = function (message) {
-        var payload = {
-            'ts': Date.now(),
-            'n': settings.name,
-            'tc': settings.textColor,
-            'bc': settings.backgroundColor,
-            'p': center(position),
-            'm': message
-        }
+    var shout = function (payload) {
         fluxCenter.push(payload);
         fluxNorth.push(payload);
         fluxSouth.push(payload);
@@ -101,6 +93,17 @@ angular.module('starter.services', ['firebase'])
         },
         setSettings: function (newSettings) {
             settings = newSettings;
+        },
+        convertMessageToPayload: function (message) {
+            return {
+                'ts': Date.now(),
+                'n': settings.name,
+                'tc': settings.textColor,
+                'bc': settings.backgroundColor,
+                'p': center(position),
+                'm': message,
+                'ext':true
+            };
         }
     };
 });
