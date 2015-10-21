@@ -1,25 +1,32 @@
 /* Empty. Add your own CSS if you like */
 
 .chatbox {
-    position: absolute;
-    bottom: 0px;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    background-color: oldlace;
 }
 
 .chat-bubble {
-    border-radius: 5px;
-    padding: 10px 18px;
-    position: relative;
-    margin: 10px;
-    max-width: 80%;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 66%;
+    min-width: 10%;
+    display: inline-block;
 }
 
-.chat-bubble:before {
-    content: "\00a0";
-    height: 16px;
-    width: 9px;
-    position: absolute;
-    bottom: -7.5px;
+.chat-bubble.left {
+    -webkit-align-self: flex-start;
+    align-self: flex-start;
+    background-color: forestgreen;
 }
+
+.chat-bubble.right {
+    margin-left: auto;
+    background-color: deepskyblue;
+}
+
 
 .chat-bubble.blue {
     background-color: deepskyblue
@@ -35,26 +42,4 @@
 
 .chat-bubble.yellow {
     background-color: lightgoldenrodyellow
-}
-
-.chat-bubble.left {
-    float: left;
-    margin-left: 55px;
-    background-color: forestgreen
-}
-
-.chat-bubble.left:before {
-    left: 10px;
-    -webkit-transform: rotate(70deg) skew(5deg);
-}
-
-.chat-bubble.right {
-    float: right;
-    margin: 5px 20px 5px 45px;
-    background-color: deepskyblue
-}
-
-.chat-bubble.right::before {
-    right: 10px;
-    -webkit-transform: rotate(118deg) skew(-5deg);
 }
