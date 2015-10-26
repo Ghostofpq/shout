@@ -7,39 +7,40 @@
     flex-direction: column;
     background-color: oldlace;
 }
-
 .chat-bubble {
     border-radius: 10px;
     padding: 10px;
     max-width: 66%;
     min-width: 10%;
     display: inline-block;
+    height: 100px;
+    margin-top: 10px;
 }
-
+.message {
+    font-size: 14px;
+}
+.details {
+    font-style: italic;
+    font-size: 12px;
+}
 .chat-bubble.left {
     -webkit-align-self: flex-start;
     align-self: flex-start;
     background-color: forestgreen;
 }
-
 .chat-bubble.right {
     margin-left: auto;
     background-color: deepskyblue;
 }
-
-
 .chat-bubble.blue {
     background-color: deepskyblue
 }
-
 .chat-bubble.red {
     background-color: coral
 }
-
 .chat-bubble.green {
     background-color: forestgreen
 }
-
 .chat-bubble.yellow {
     background-color: lightgoldenrodyellow
 }

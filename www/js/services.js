@@ -17,19 +17,19 @@ angular.module('starter.services', ['firebase'])
     };
     // Might use a resource here that returns a JSON array
     var center = function (pos) {
-        return (Math.round(pos.coords.latitude * 1000)) + "x" + (Math.round(pos.coords.longitude * 1000));
+        return (Math.round(pos.coords.latitude * 100)) + "x" + (Math.round(pos.coords.longitude * 100));
     }
     var north = function (pos) {
-        return ((Math.round(pos.coords.latitude * 1000) + 1)) + "x" + (Math.round(pos.coords.longitude * 1000));
+        return ((Math.round(pos.coords.latitude * 100) + 1)) + "x" + (Math.round(pos.coords.longitude * 100));
     }
     var south = function (pos) {
-        return ((Math.round(pos.coords.latitude * 1000) - 1)) + "x" + (Math.round(pos.coords.longitude * 1000));
+        return ((Math.round(pos.coords.latitude * 100) - 1)) + "x" + (Math.round(pos.coords.longitude * 100));
     }
     var east = function (pos) {
-        return (Math.round(pos.coords.latitude * 1000)) + "x" + ((Math.round(pos.coords.longitude * 1000) - 1));
+        return (Math.round(pos.coords.latitude * 100)) + "x" + ((Math.round(pos.coords.longitude * 100) - 1));
     }
     var west = function (pos) {
-        return (Math.round(pos.coords.latitude * 1000)) + "x" + ((Math.round(pos.coords.longitude * 1000) + 1));
+        return (Math.round(pos.coords.latitude * 100)) + "x" + ((Math.round(pos.coords.longitude * 100) + 1));
     }
 
     var receive = function (payload) {

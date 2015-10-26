@@ -4,14 +4,14 @@
         <div collection-repeat="c in chat" class="chatbox">
 
             <div ng-class="{'left':c.ext,'right':!c.ext}" class="chat-bubble">
-                {{c.m}}
-                <span>by {{c.n}} </span><span am-time-ago="c.ts" />
+                <div class="message">{{c.m}}</div>
+                <div class="details">by {{c.n}} <span am-time-ago="c.ts" /></div>
             </div>
         </div>
     </ion-content>
     <ion-footer-bar keyboard-attach class="bar-stable item-input-inset">
         <label class="item-input-wrapper">
-            <input type="text" placeholder="Type your message" on-return="publish(); closeKeyboard()" ng-model="message" on-focus="inputUp()" on-blur="inputDown()" />
+            <input type="text" placeholder="Type your message" on-return="publish(); closeKeyboard()" ng-model="message" on-focus="inputUp()" on-blur="inputDown()" maxlength="75"/>
         </label>
         <button class="button button-clear" ng-click="publish()">
             Send
